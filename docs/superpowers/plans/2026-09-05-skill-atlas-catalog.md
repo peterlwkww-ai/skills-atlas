@@ -723,7 +723,7 @@ MSG
 **Interfaces:**
 - Consumes: `validateRegistry` from `src/lib/schema.mjs`；`src/data/registry.json` 的結構（Task 2）
 - Produces:
-  - `src/lib/join.mjs` 匯出 `validateNotes(registry, notes) -> string[]` 與 `joinSkills(registry, notes) -> SkillView[]`
+  - `src/lib/join.mjs` 匯出三個函式：`validateNotes(registry, notes) -> string[]`、`joinSkills(registry, notes) -> SkillView[]`、`sortForCatalogue(views) -> SkillView[]`（精選依 rank 在前，其餘依名稱）
   - `SkillView` 的欄位：`{ id, name, command, source, version, category, description, headings, bodyExcerpt, bodyMarkdown, sourceUrl, note }`，其中 `source` 是完整的 source 物件，`note` 是 `{ rank, rating, frequency, tags, verdict, body }` 或 `null`
   - `notes` 參數的形狀：`[{ id, data: {...frontmatter}, body: string }]`，與 Astro `getCollection('notes')` 的回傳一致
 
