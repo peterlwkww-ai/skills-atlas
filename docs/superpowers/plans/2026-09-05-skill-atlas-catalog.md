@@ -79,7 +79,7 @@
 
 **Interfaces:**
 - Consumes: 無（第一個任務）
-- Produces: `src/lib/url.mjs` 匯出 `href(path: string): string` —— 後續每個任務組內部連結都必須用它。npm scripts `build` / `test` / `test:smoke` 的名稱後續任務會沿用。
+- Produces: `src/lib/url.mjs` 匯出 `href(base: string, path: string): string` —— 兩個參數，`base` 一律傳 `import.meta.env.BASE_URL`。後續每個任務組內部連結都必須用它。npm scripts `build` / `test` / `test:smoke` 的名稱後續任務會沿用。
 
 - [ ] **Step 1: 建立 repo 與 git**
 
