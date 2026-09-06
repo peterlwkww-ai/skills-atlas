@@ -1,0 +1,42 @@
+---
+import { href } from '../lib/url.mjs'
+const base = import.meta.env.BASE_URL
+const { skill } = Astro.props
+const n = skill.note
+const stars = n ? '★'.repeat(n.rating) + '☆'.repeat(5 - n.rating) : ''
+---
+<article
+  class="card"
+  data-skill-id={skill.id}
+  data-source={skill.source?.id}
+  data-rating={n ? String(n.rating) : '0'}
+  data-frequency={n ? n.frequency : ''}
+  data-tags={n ? n.tags.join(' ') : ''}
+  data-curated={n ? 'true' : 'false'}
+>
+  <div class="card-top">
+    {n && <span class="rank">{n.rank}</span>}
+    <a class="card-name" href={href(base, `/skills/${skill.id}/`)}>{skill.name}</a>
+    {n && <span class="stars">{stars}</span>}
+  </div>
+  <p class="card-verdict">{n ? n.verdict : skill.description}</p>
+  <p class="card-meta">
+    {skill.source?.name} v{skill.version}{n && <> · {n.frequency}</>}
+    {n && n.tags.length > 0 && <> · {n.tags.join(', ')}</>}
+  </p>
+</article>
+
+<style>
+  .card { border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; background: var(--card); }
+  .card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .rank {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 5px; flex: none;
+    background: color-mix(in srgb, var(--accent) 20%, transparent);
+    color: var(--accent); font-size: 12px; font-weight: 600;
+  }
+  .card-name { font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 600; text-decoration: none; }
+  .stars { margin-left: auto; color: var(--star); font-size: 12px; letter-spacing: 1px; }
+  .card-verdict { margin: 0 0 8px; font-size: 14px; line-height: 1.55; }
+  .card-meta { margin: 0; font-size: 12px; color: var(--muted); }
+</style>
