@@ -20,19 +20,27 @@ const fullHtml = full ? mdToSafeHtml(skill.bodyMarkdown) : ''
 
   {full ? (
     <div class="prose" set:html={fullHtml} />
-  ) : (
+  ) : tier !== 'linkOnly' ? (
     <>
       <p class="label">Opening</p>
       <div class="prose" set:html={excerptHtml} />
       <p class="cta">
         <a href={skill.sourceUrl}>Read the full skill at the source ↗</a>
       </p>
-      {tier === 'linkOnly' && (
-        <p class="why">
-          The full text is not reproduced here: this source's licence is
-          unverified or does not permit redistribution.
-        </p>
-      )}
+    </>
+  ) : (
+    <>
+      {/* linkOnly per spec §5.2: description + headings + link-out only —
+          no excerpt, not even the "Opening" preview. The licence here is
+          either unverified or forbids redistribution, and an excerpt is
+          still redistribution. */}
+      <p class="cta">
+        <a href={skill.sourceUrl}>Read the full skill at the source ↗</a>
+      </p>
+      <p class="why">
+        The full text is not reproduced here: this source's licence is
+        unverified or does not permit redistribution.
+      </p>
     </>
   )}
 </section>
