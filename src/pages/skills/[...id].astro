@@ -56,6 +56,11 @@ const noteHtml = n ? mdToSafeHtml(n.body) : ''
           <p class="muted">No notes written for this skill yet.</p>
         </section>
       )}
+      {skill.guideUrl && (
+        <p class="guide-link">
+          <a href={skill.guideUrl}>See the guided walkthrough on Superpowers Guide ↗</a>
+        </p>
+      )}
       <LicenceBadge source={skill.source} />
     </div>
 
@@ -87,6 +92,7 @@ const noteHtml = n ? mdToSafeHtml(n.body) : ''
   .prose { font-size: 14px; }
   .prose :global(h2) { font-size: 15px; margin: 22px 0 6px; }
   .muted { color: var(--muted); font-size: 13px; }
+  .guide-link { margin: 18px 0 0; font-size: 13px; }
   @media (max-width: 860px) {
     .panes { grid-template-columns: 1fr; gap: 24px; }
     #pane-mine { position: static; }

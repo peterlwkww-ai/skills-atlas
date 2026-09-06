@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro'
+import registry from '../data/registry.json'
+
+const TIER_NOTE = {
+  full: 'Full text reproduced here, with attribution.',
+  excerpt: 'Opening excerpt only; read the rest at the source.',
+  linkOnly: 'Metadata and structure only; licence unverified or restrictive.',
+}
+---
+<Base title="About">
+  <h1>About skill-atlas</h1>
+
+  <p class="lede">
+    Skill directories tell you what exists and how to install it. This one
+    tells you what is worth using. Every entry carries a rank, a rating and a
+    written opinion — including when not to reach for it.
+  </p>
+
+  <h2>How the data works</h2>
+  <p>
+    Two stores that never touch each other. Skill facts are generated from the
+    installed <code>SKILL.md</code> files. The opinions are hand-written and no
+    script may write to them. They join at build time.
+  </p>
+
+  <h2>Sources &amp; licences</h2>
+  <p>
+    Third-party text is reproduced only where the source's licence allows it.
+    When a licence cannot be verified, the default is to link out rather than
+    reproduce.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Source</th><th>Licence</th><th>Tier</th><th>What that means</th></tr>
+    </thead>
+    <tbody>
+      {registry.sources.map(s => (
+        <tr>
+          <td><a href={s.repo}>{s.name} ↗</a></td>
+          <td>{s.licenceUrl ? <a href={s.licenceUrl}>{s.licence} ↗</a> : s.licence}</td>
+          <td><code>{s.embedTier}</code></td>
+          <td>{TIER_NOTE[s.embedTier]}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <h2>Related</h2>
+  <p>
+    <a href="https://peterlwkww-ai.github.io/Superpowers-guide/">Superpowers Guide ↗</a>
+    — a scenario-by-scenario walkthrough of the superpowers plugin specifically.
+  </p>
+</Base>
+
+<style>
+  .lede { color: var(--muted); max-width: 62ch; }
+  h2 { font-size: 17px; margin: 28px 0 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+</style>

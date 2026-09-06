@@ -72,6 +72,9 @@ export function joinSkills(registry, notes) {
       bodyExcerpt: skill.bodyExcerpt,
       bodyMarkdown: skill.bodyMarkdown ?? null,
       sourceUrl: skill.sourceUrl,
+      guideUrl: sourceById.get(skill.sourceId)?.guideUrlTemplate
+        ? sourceById.get(skill.sourceId).guideUrlTemplate.replace('{name}', skill.name)
+        : null,
       note: note
         ? {
             rank: note.data.rank,
