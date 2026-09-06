@@ -1754,6 +1754,9 @@ let fuse = null
 
 function clearSearch() {
   for (const el of [...rows, ...cards]) delete el.dataset.searchHidden
+  // 卡片的可見性是這支腳本直接設的，applyFilters() 只管 rows，
+  // 所以清空搜尋時必須自己把卡片放回來，否則它們會永遠留在隱藏狀態。
+  for (const card of cards) card.hidden = false
 }
 
 function runSearch(query) {
