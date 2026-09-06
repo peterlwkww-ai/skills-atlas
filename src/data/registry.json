@@ -96,7 +96,7 @@
       "bodyExcerpt": "Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill.",
       "bodyMarkdown": null,
       "sizeBytes": 33168,
-      "sourceUrl": "https://github.com/anthropics/skills/blob/main/skill-creator/SKILL.md"
+      "sourceUrl": "https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md"
     }
   ]
 }

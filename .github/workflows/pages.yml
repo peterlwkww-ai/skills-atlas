@@ -1,0 +1,52 @@
+# 建置並部署 skill-atlas 到 GitHub Pages。
+# 一次性手動設定（無法用 GITHUB_TOKEN 自動化）：
+#   repo Settings → Pages → Build and deployment → Source: "GitHub Actions".
+#   在那之前 deploy job 會以 "Get Pages site failed" 失敗。
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          # 24，不是 20：測試指令用 glob 形式（`node --test "test/unit/**/*.test.mjs"`），
+          # 而 node --test 的 glob 支援從 Node 21 才有。
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Unit tests
+        run: npm test
+      - name: Build (runs data validation first)
+        run: npm run build
+      - name: Smoke tests against dist/
+        run: npm run test:smoke
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
