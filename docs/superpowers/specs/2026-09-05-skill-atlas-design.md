@@ -1,4 +1,4 @@
-# skill-atlas 設計文件
+# skills-atlas 設計文件
 
 - **日期：** 2026-09-05
 - **狀態：** 待審
@@ -8,7 +8,7 @@
 
 ## 1. 這是什麼
 
-一個公開的 **Agent Skills 策展站**。核心主張：市面上的技能目錄（`find-skills`、`SearchSkills`、各家 marketplace）都是**安裝導向的登錄簿** — 告訴你有什麼、怎麼裝。skill-atlas 是**策展導向的評論站** — 告訴你哪些值得用、為什麼、什麼時候別用。
+一個公開的 **Agent Skills 策展站**。核心主張：市面上的技能目錄（`find-skills`、`SearchSkills`、各家 marketplace）都是**安裝導向的登錄簿** — 告訴你有什麼、怎麼裝。skills-atlas 是**策展導向的評論站** — 告訴你哪些值得用、為什麼、什麼時候別用。
 
 差異點只有一個，而且是唯一不能從別處取得的東西：**作者手寫的使用心得與排名**。所有設計決定都服從這一點。
 
@@ -49,7 +49,7 @@
 
 | 決策 | 選擇 | 理由 |
 |---|---|---|
-| 專案落點 | **新 repo `skill-atlas`，與 Superpowers-guide 並存** | 兩站定位不同；舊站專講 superpowers 插件，不受影響 |
+| 專案落點 | **新 repo `skills-atlas`，與 Superpowers-guide 並存** | 兩站定位不同；舊站專講 superpowers 插件，不受影響 |
 | 技術棧 | **Astro 靜態輸出** | 讀者是社群，可分享的單一技能 URL 從加分項變成必要條件；hash router 做不到 |
 | 導覽模型 | **單一目錄 + 強篩選**，預設套用「我的精選」 | 一套資料結構撐 10 到 500 筆 |
 | 目錄頁版面 | **雙模式**：精選用大卡片，全部用密集表格 + 側欄 | 手寫心得值得專屬版面；查詢用清單該是密集表格 |
@@ -73,7 +73,7 @@
 ### 檔案結構
 
 ```
-skill-atlas/
+skills-atlas/
 ├─ src/
 │  ├─ data/
 │  │  └─ registry.json            # 機器產出的事實。永不手改。
@@ -354,17 +354,17 @@ checkout → setup-node → npm ci → node --test → node scripts/validate.mjs
 兩站並存，各自獨立部署：
 
 - **Superpowers-guide** — superpowers 插件的情境導覽教學（7 個情境、14 個技能）
-- **skill-atlas** — 跨來源的技能策展目錄
+- **skills-atlas** — 跨來源的技能策展目錄
 
 互連方式：
 
 - 兩站頁尾互放連結
-- skill-atlas 上 `sourceId === "superpowers"` 的技能，若在 Superpowers-guide 有對應頁面，詳情頁加一條「See the guided walkthrough ↗」連結（對應關係用 source 層級的 URL 樣板產生，不需逐技能維護）
+- skills-atlas 上 `sourceId === "superpowers"` 的技能，若在 Superpowers-guide 有對應頁面，詳情頁加一條「See the guided walkthrough ↗」連結（對應關係用 source 層級的 URL 樣板產生，不需逐技能維護）
 
 ---
 
 ## 13. 未決的假設（實作時若判斷有誤，回報而非自行改變）
 
-1. **repo 名稱 `skill-atlas`** — 提議值，作者未明確確認。改名只影響 repo 與部署 URL，不影響任何設計。
+1. **repo 名稱 `skills-atlas`** — 提議值，作者未明確確認。改名只影響 repo 與部署 URL，不影響任何設計。
 2. **Top 10 的實際名單與心得內容** — 尚未產出。實作時先用 5 筆佔位資料把版面做出來，內容由作者填寫。
 3. **`headings` 只抽 `##` 層級** — 若某些 SKILL.md 的主要結構在 `###`，需在子專案 2 調整抽取深度。

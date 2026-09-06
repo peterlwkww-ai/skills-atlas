@@ -1,20 +1,20 @@
-# skill-atlas 目錄站 Implementation Plan
+# skills-atlas 目錄站 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 建立 skill-atlas 靜態站台 —— 一個 Agent Skills 策展目錄，預設顯示作者手寫心得的精選技能，可切換為完整技能目錄並篩選搜尋，每個技能有獨立 URL，第三方內容依授權分級呈現。
+**Goal:** 建立 skills-atlas 靜態站台 —— 一個 Agent Skills 策展目錄，預設顯示作者手寫心得的精選技能，可切換為完整技能目錄並篩選搜尋，每個技能有獨立 URL，第三方內容依授權分級呈現。
 
 **Architecture:** Astro 靜態輸出。資料分兩處且互不覆蓋：`src/data/registry.json` 是機器產出的技能事實，`src/content/notes/*.md` 是作者手寫心得，兩者在建置期用 `skill:` 欄位 join。`scripts/validate.mjs` 在 `astro build` 前執行五條硬規則，其中「未登記授權不得嵌入全文」是建置期的合規攔截。前端只有原生 DOM 篩選與 Fuse.js 搜尋，無框架。
 
 **Tech Stack:** Astro 5（static）、Fuse.js 7、marked（Markdown → HTML，建置期）、sanitize-html（第三方內容消毒）、gray-matter（validate.mjs 讀 frontmatter）、node:test、GitHub Actions → GitHub Pages
 
-**Spec:** `docs/superpowers/specs/2026-09-05-skill-atlas-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-05-skills-atlas-design.md`
 
 ## Global Constraints
 
 - **Node 版本：** 本機與 CI 都用 **24**。（原本沿用 Superpowers-guide 的 20，但 `node --test <目錄>` 在本機的 Node/Windows 組合上是壞的，測試指令必須改用 glob 形式，而 `node --test` 的 glob 支援要 Node ≥ 21。CI 對齊本機主版本也順帶消掉「本機過、CI 掛」這整類問題。）
 - **部署分支：** `master`（不是 `main`）。與 Superpowers-guide 一致。
-- **Pages base path：** 這是 project site，站台掛在 `/skill-atlas` 之下。**所有內部連結一律用 `import.meta.env.BASE_URL` 組出來，不得寫死開頭的 `/`。** 這是 Pages project site 最常見的壞法。
+- **Pages base path：** 這是 project site，站台掛在 `/skills-atlas` 之下。**所有內部連結一律用 `import.meta.env.BASE_URL` 組出來，不得寫死開頭的 `/`。** 這是 Pages project site 最常見的壞法。
 - **語言：** 站台所有面向使用者的文案一律英文。程式碼註解與本計畫為中文。
 - **`embedTier` 預設值：** `linkOnly`。**任何來源的授權等級都必須先讀過該來源的實際 LICENSE 才可提升。禁止依印象填寫。**（spec §5.2）
 - **資料分離：** `src/data/registry.json` 是機器產出區，`src/content/notes/` 是手寫區。任何程式都不得寫入 `src/content/notes/`。
@@ -96,7 +96,7 @@ git config user.email "<your git email>"
 
 ```json
 {
-  "name": "skill-atlas",
+  "name": "skills-atlas",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -144,7 +144,7 @@ import { defineConfig } from 'astro/config'
 
 export default defineConfig({
   site: 'https://peterlwkww-ai.github.io',
-  base: '/skill-atlas',
+  base: '/skills-atlas',
   output: 'static',
   trailingSlash: 'always',
 })
@@ -171,13 +171,13 @@ import { readFile } from 'node:fs/promises'
 
 test('dist/index.html exists and carries the site title', async () => {
   const html = await readFile('dist/index.html', 'utf8')
-  assert.match(html, /<title>[^<]*skill-atlas/i)
+  assert.match(html, /<title>[^<]*skills-atlas/i)
 })
 
 test('internal links are prefixed with the Pages base path', async () => {
   const html = await readFile('dist/index.html', 'utf8')
   // 不得出現 href="/about" 這種沒帶 base 的絕對路徑內部連結
-  assert.doesNotMatch(html, /href="\/(?!skill-atlas\/)[a-z]/)
+  assert.doesNotMatch(html, /href="\/(?!skills-atlas\/)[a-z]/)
 })
 ```
 
@@ -189,7 +189,7 @@ Expected: FAIL —— `ENOENT: no such file or directory, open 'dist/index.html'
 - [ ] **Step 9: 寫 src/lib/url.mjs**
 
 ```js
-// Pages project site 的 base 是 /skill-atlas。所有內部連結都要經過這裡，
+// Pages project site 的 base 是 /skills-atlas。所有內部連結都要經過這裡，
 // 不要在 template 裡自己拼 '/'，那在 Pages 上會 404。
 export function href(base, path) {
   const b = base.endsWith('/') ? base.slice(0, -1) : base
@@ -213,7 +213,7 @@ const { title, description = 'A curated catalogue of agent skills.' } = Astro.pr
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{title} · skill-atlas</title>
+  <title>{title} · skills-atlas</title>
   <meta name="description" content={description} />
   <style is:global>
     :root {
@@ -243,7 +243,7 @@ const { title, description = 'A curated catalogue of agent skills.' } = Astro.pr
 </head>
 <body>
   <header class="site"><div class="wrap">
-    <a class="brand" href={href(base, '/')}>skill-atlas</a>
+    <a class="brand" href={href(base, '/')}>skills-atlas</a>
   </div></header>
   <main class="wrap"><slot /></main>
   <footer class="site"><div class="wrap">
@@ -262,7 +262,7 @@ const { title, description = 'A curated catalogue of agent skills.' } = Astro.pr
 import Base from '../layouts/Base.astro'
 ---
 <Base title="Skills">
-  <h1>skill-atlas</h1>
+  <h1>skills-atlas</h1>
   <p>A curated catalogue of agent skills.</p>
 </Base>
 ```
@@ -278,12 +278,12 @@ Expected: build 成功；兩條 smoke test 都 PASS。
 - [ ] **Step 13: 寫 README.md**
 
 ```markdown
-# skill-atlas
+# skills-atlas
 
 A curated catalogue of agent skills. Not an installer — a review site:
 which skills are worth using, why, and when not to.
 
-**Live:** https://peterlwkww-ai.github.io/skill-atlas/
+**Live:** https://peterlwkww-ai.github.io/skills-atlas/
 
 ## Data model
 
@@ -1626,7 +1626,7 @@ Expected: 全部 PASS（累計 9 條）
 npm run dev
 ```
 
-在瀏覽器開 `http://localhost:4321/skill-atlas/`，按 `All 5`，勾選 Source = Superpowers，確認列表剩 3 筆且計數變成 `3 of 5 skills`；按 Clear all 回到 5 筆。網址列應出現 `?view=all`。確認後 Ctrl-C 停掉 dev server。
+在瀏覽器開 `http://localhost:4321/skills-atlas/`，按 `All 5`，勾選 Source = Superpowers，確認列表剩 3 筆且計數變成 `3 of 5 skills`；按 Clear all 回到 5 筆。網址列應出現 `?view=all`。確認後 Ctrl-C 停掉 dev server。
 
 - [ ] **Step 9: Commit**
 
@@ -2249,7 +2249,7 @@ Expected: 全部 PASS（累計 19 條）
 
 - [ ] **Step 6: 人工確認手機行為**
 
-`npm run dev`，開 `http://localhost:4321/skill-atlas/skills/superpowers/brainstorming/`，用瀏覽器 devtools 切到寬度 375px，確認：分頁籤出現、預設在 My take、點 Full skill 會切換、拉寬回 1200px 時分頁籤消失且兩欄同時顯示。Ctrl-C 停掉。
+`npm run dev`，開 `http://localhost:4321/skills-atlas/skills/superpowers/brainstorming/`，用瀏覽器 devtools 切到寬度 375px，確認：分頁籤出現、預設在 My take、點 Full skill 會切換、拉寬回 1200px 時分頁籤消失且兩欄同時顯示。Ctrl-C 停掉。
 
 - [ ] **Step 7: Commit**
 
@@ -2382,7 +2382,7 @@ const TIER_NOTE = {
 }
 ---
 <Base title="About">
-  <h1>About skill-atlas</h1>
+  <h1>About skills-atlas</h1>
 
   <p class="lede">
     Skill directories tell you what exists and how to install it. This one
@@ -2474,7 +2474,7 @@ MSG
 
 **Interfaces:**
 - Consumes: `npm test`、`npm run build`、`npm run test:smoke` 三個 script（Task 1 定義）
-- Produces: 部署到 `https://peterlwkww-ai.github.io/skill-atlas/`
+- Produces: 部署到 `https://peterlwkww-ai.github.io/skills-atlas/`
 
 - [ ] **Step 1: 寫 scripts/check-links.mjs**
 
@@ -2534,7 +2534,7 @@ Expected: 逐條印出狀態。有 `BAD` 或 `ERR` 就手動修 `registry.json` 
 - [ ] **Step 3: 寫 .github/workflows/pages.yml**
 
 ```yaml
-# 建置並部署 skill-atlas 到 GitHub Pages。
+# 建置並部署 skills-atlas 到 GitHub Pages。
 # 一次性手動設定（無法用 GITHUB_TOKEN 自動化）：
 #   repo Settings → Pages → Build and deployment → Source: "GitHub Actions".
 #   在那之前 deploy job 會以 "Get Pages site failed" 失敗。
@@ -2630,31 +2630,31 @@ MSG
 推送需要 remote 存在。若尚未建立 GitHub repo，先建立再推：
 
 ```bash
-gh repo create peterlwkww-ai/skill-atlas --public --source=. --remote=origin --push
+gh repo create peterlwkww-ai/skills-atlas --public --source=. --remote=origin --push
 ```
 
 若 repo 已存在：
 
 ```bash
-git remote add origin https://github.com/peterlwkww-ai/skill-atlas.git
+git remote add origin https://github.com/peterlwkww-ai/skills-atlas.git
 git push -u origin master
 ```
 
 - [ ] **Step 7: 一次性手動設定 Pages**
 
-到 `https://github.com/peterlwkww-ai/skill-atlas/settings/pages`，把
+到 `https://github.com/peterlwkww-ai/skills-atlas/settings/pages`，把
 **Build and deployment → Source** 設為 **GitHub Actions**。
 
 **在此之前 deploy job 一定會以 `Get Pages site failed` 失敗** —— 這不是程式錯誤。設定後重跑 workflow。
 
 - [ ] **Step 8: 驗證線上站台**
 
-開 `https://peterlwkww-ai.github.io/skill-atlas/` 確認：
+開 `https://peterlwkww-ai.github.io/skills-atlas/` 確認：
 
 1. 首頁預設顯示 2 張精選卡片
 2. 按 `All 5` 切到目錄，側欄篩選可用，網址變成 `?view=all`
-3. 點 `brainstorming` 進入 `/skill-atlas/skills/superpowers/brainstorming/`，桌機顯示雙欄
-4. `/skill-atlas/about/` 的來源表格三列齊全
+3. 點 `brainstorming` 進入 `/skills-atlas/skills/superpowers/brainstorming/`，桌機顯示雙欄
+4. `/skills-atlas/about/` 的來源表格三列齊全
 5. **頁面上沒有任何連結 404** —— 若有，幾乎必定是某處內部連結沒走 `href(base, …)`
 
 ---
@@ -2708,7 +2708,7 @@ git push -u origin master
 
 ## Execution Handoff
 
-**Plan complete and saved to `docs/superpowers/plans/2026-09-05-skill-atlas-catalog.md`. Two execution options:**
+**Plan complete and saved to `docs/superpowers/plans/2026-09-05-skills-atlas-catalog.md`. Two execution options:**
 
 **1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
 

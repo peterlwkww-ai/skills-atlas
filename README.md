@@ -1,9 +1,9 @@
-# skill-atlas
+# skills-atlas
 
 A curated catalogue of agent skills. Not an installer — a review site:
 which skills are worth using, why, and when not to.
 
-**Planned URL (not yet published):** https://peterlwkww-ai.github.io/skill-atlas/
+**Planned URL (not yet published):** https://peterlwkww-ai.github.io/skills-atlas/
 — nothing has been deployed yet; the Pages workflow exists but the one-time
 "Settings → Pages → Source: GitHub Actions" step hasn't been done.
 

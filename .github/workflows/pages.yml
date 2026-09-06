@@ -1,4 +1,4 @@
-# 建置並部署 skill-atlas 到 GitHub Pages。
+# 建置並部署 skills-atlas 到 GitHub Pages。
 # 一次性手動設定（無法用 GITHUB_TOKEN 自動化）：
 #   repo Settings → Pages → Build and deployment → Source: "GitHub Actions".
 #   在那之前 deploy job 會以 "Get Pages site failed" 失敗。
