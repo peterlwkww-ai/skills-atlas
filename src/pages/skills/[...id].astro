@@ -34,13 +34,13 @@ const noteHtml = n ? mdToSafeHtml(n.body) : ''
 
   {n && (
     <div id="tabs" role="tablist" hidden>
-      <button type="button" data-pane="mine" class="active" role="tab" aria-selected="true">My take</button>
-      <button type="button" data-pane="source" role="tab" aria-selected="false">Full skill</button>
+      <button type="button" id="tab-mine" data-pane="mine" class="active" role="tab" aria-selected="true" aria-controls="pane-mine">My take</button>
+      <button type="button" id="tab-source" data-pane="source" role="tab" aria-selected="false" aria-controls="pane-source">Full skill</button>
     </div>
   )}
 
   <div class="panes">
-    <div id="pane-mine" class="pane">
+    <div id="pane-mine" class="pane" role="tabpanel" aria-labelledby="tab-mine">
       {n ? (
         <>
           <section class="verdict">
@@ -64,7 +64,7 @@ const noteHtml = n ? mdToSafeHtml(n.body) : ''
       <LicenceBadge source={skill.source} />
     </div>
 
-    <div id="pane-source" class="pane">
+    <div id="pane-source" class="pane" role="tabpanel" aria-labelledby="tab-source">
       <SourceBody skill={skill} />
     </div>
   </div>

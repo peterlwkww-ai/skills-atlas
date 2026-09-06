@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro'
+import { href } from '../lib/url.mjs'
+const base = import.meta.env.BASE_URL
+---
+<Base title="Not found">
+  <h1>Page not found</h1>
+  <p class="lede">
+    That skill URL doesn't match anything here — it may have moved or never
+    existed. Every skill on this site is meant to have a stable, shareable
+    link, so if you followed a link from elsewhere, it's likely gone stale.
+  </p>
+  <p><a href={href(base, '/')}>Back to the catalogue ↗</a></p>
+</Base>
+
+<style>
+  .lede { color: var(--muted); max-width: 62ch; }
+</style>

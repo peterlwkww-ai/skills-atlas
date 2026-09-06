@@ -67,6 +67,17 @@ test('rule 4: bodyMarkdown set on a source that is not embedTier full is an erro
   assert.ok(errors.some(e => /embedTier/i.test(e) && /bodyMarkdown/i.test(e)), `got: ${errors}`)
 })
 
+// Finding 8 (final review, feat/catalogue): rule 4 had only ever been
+// exercised against a linkOnly fixture. excerpt is the other restricted
+// tier, and it is the branch Finding 4's linkOnly-excerpt bug actually
+// lived in — rule 4's own code path for it had never been run by a test.
+test('rule 4: bodyMarkdown set on a source with embedTier "excerpt" is also an error', () => {
+  const bad = JSON.parse(readFileSync(
+    new URL('../fixtures/registry-excerpt-with-bodymarkdown.json', import.meta.url), 'utf8'))
+  const errors = validateNotes(bad, [])
+  assert.ok(errors.some(e => /embedTier/i.test(e) && /bodyMarkdown/i.test(e) && /excerpt/i.test(e)), `got: ${errors}`)
+})
+
 test('a skill with no note joins fine and gets note === null', () => {
   const views = joinSkills(registry, [])
   assert.equal(views.length, registry.skills.length)
