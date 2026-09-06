@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-09-05",
+  "sources": [
+    {
+      "id": "superpowers",
+      "name": "Superpowers",
+      "repo": "https://github.com/obra/superpowers",
+      "licence": "MIT",
+      "licenceUrl": "https://github.com/obra/superpowers/blob/main/LICENSE",
+      "embedTier": "full"
+    },
+    {
+      "id": "task-observer",
+      "name": "One Skill to Rule Them All",
+      "repo": "https://github.com/rebelytics/one-skill-to-rule-them-all",
+      "licence": "CC BY 4.0",
+      "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "embedTier": "full"
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic Skills",
+      "repo": "https://github.com/anthropics/skills",
+      "licence": "unknown",
+      "licenceUrl": null,
+      "embedTier": "linkOnly"
+    }
+  ],
+  "skills": [
+    {
+      "id": "superpowers/brainstorming",
+      "name": "brainstorming",
+      "command": "/superpowers:brainstorming",
+      "sourceId": "superpowers",
+      "version": "6.3.0",
+      "category": "Planning",
+      "description": "You MUST use this before any creative work — creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation.",
+      "headings": ["Three Paths", "Anti-Pattern: Too Simple To Need Approval", "Red Flags", "Checklist", "Process Flow", "Visual Companion"],
+      "bodyExcerpt": "Help turn ideas into fully formed designs and specs through natural collaborative dialogue.\n\nStart by classifying how much process the request needs, then work through your path: understand the context, refine the idea, present a design, and get your human partner's approval.",
+      "bodyMarkdown": null,
+      "sizeBytes": 15456,
+      "sourceUrl": "https://github.com/obra/superpowers/blob/main/skills/brainstorming/SKILL.md"
+    },
+    {
+      "id": "superpowers/systematic-debugging",
+      "name": "systematic-debugging",
+      "command": "/superpowers:systematic-debugging",
+      "sourceId": "superpowers",
+      "version": "6.3.0",
+      "category": "Debugging",
+      "description": "Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes.",
+      "headings": ["Overview", "The Loop", "Red Flags"],
+      "bodyExcerpt": "A bug is a hypothesis about the system that has not been tested yet. Write the hypothesis down before changing anything.",
+      "bodyMarkdown": null,
+      "sizeBytes": 9000,
+      "sourceUrl": "https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md"
+    },
+    {
+      "id": "superpowers/writing-plans",
+      "name": "writing-plans",
+      "command": "/superpowers:writing-plans",
+      "sourceId": "superpowers",
+      "version": "6.3.0",
+      "category": "Planning",
+      "description": "Use when you have a spec or requirements for a multi-step task, before touching code.",
+      "headings": ["Overview", "Scope Check", "File Structure", "Task Right-Sizing", "No Placeholders", "Self-Review"],
+      "bodyExcerpt": "Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste.",
+      "bodyMarkdown": null,
+      "sizeBytes": 6000,
+      "sourceUrl": "https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md"
+    },
+    {
+      "id": "task-observer/task-observer",
+      "name": "task-observer",
+      "command": "/task-observer",
+      "sourceId": "task-observer",
+      "version": "3.x",
+      "category": "Meta",
+      "description": "Monitors task execution for skill improvement opportunities. Captures patterns, user corrections, workflow insights, and methodology worth preserving as reusable skills.",
+      "headings": ["Session Start Protocol", "When to Observe", "What to Watch For", "How to Log", "Surfacing Protocol", "Acting on Observations"],
+      "bodyExcerpt": "Skills improve best from friction noticed during real work, not from sitting down to \"improve a skill.\" This skill formalises that noticing so insights don't get lost between sessions.",
+      "bodyMarkdown": null,
+      "sizeBytes": 45010,
+      "sourceUrl": "https://github.com/rebelytics/one-skill-to-rule-them-all/blob/main/SKILL.md"
+    },
+    {
+      "id": "anthropic/skill-creator",
+      "name": "skill-creator",
+      "command": "/anthropic-skills:skill-creator",
+      "sourceId": "anthropic",
+      "version": "1.x",
+      "category": "Meta",
+      "description": "Create new skills, modify and improve existing skills, and measure skill performance.",
+      "headings": ["Overview", "Creating a Skill", "Evals"],
+      "bodyExcerpt": "Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill.",
+      "bodyMarkdown": null,
+      "sizeBytes": 33168,
+      "sourceUrl": "https://github.com/anthropics/skills/blob/main/skill-creator/SKILL.md"
+    }
+  ]
+}
