@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- **Node 版本：** 本機 v24.16.0；CI 用 `node-version: 20`（與 Superpowers-guide 一致）。程式碼不得使用 Node 20 沒有的 API。
+- **Node 版本：** 本機與 CI 都用 **24**。（原本沿用 Superpowers-guide 的 20，但 `node --test <目錄>` 在本機的 Node/Windows 組合上是壞的，測試指令必須改用 glob 形式，而 `node --test` 的 glob 支援要 Node ≥ 21。CI 對齊本機主版本也順帶消掉「本機過、CI 掛」這整類問題。）
 - **部署分支：** `master`（不是 `main`）。與 Superpowers-guide 一致。
 - **Pages base path：** 這是 project site，站台掛在 `/skill-atlas` 之下。**所有內部連結一律用 `import.meta.env.BASE_URL` 組出來，不得寫死開頭的 `/`。** 這是 Pages project site 最常見的壞法。
 - **語言：** 站台所有面向使用者的文案一律英文。程式碼註解與本計畫為中文。
@@ -2551,7 +2551,9 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          # 24，不是 20：測試指令用 glob 形式（`node --test "test/unit/**/*.test.mjs"`），
+          # 而 node --test 的 glob 支援從 Node 21 才有。
+          node-version: 24
           cache: npm
       - run: npm ci
       - name: Unit tests
