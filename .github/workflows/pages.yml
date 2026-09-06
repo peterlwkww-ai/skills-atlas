@@ -2,10 +2,16 @@
 # 一次性手動設定（無法用 GITHUB_TOKEN 自動化）：
 #   repo Settings → Pages → Build and deployment → Source: "GitHub Actions".
 #   在那之前 deploy job 會以 "Get Pages site failed" 失敗。
+#
+# pull_request 觸發只跑測試與建置，不碰 Pages —— configure-pages、upload 與
+# deploy 三個步驟都需要 Pages API，在 PR 上執行只會失敗，而且會把已上線的
+# 站台換成 PR 分支的產出。
 name: Deploy to GitHub Pages
 
 on:
   push:
+    branches: [master]
+  pull_request:
     branches: [master]
   workflow_dispatch:
 
@@ -15,7 +21,9 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  # 依 ref 分組：PR 的執行不會取消正在跑的 master 部署，
+  # 但同一個 PR 連推兩次時，前一次會被取消。
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -37,12 +45,15 @@ jobs:
       - name: Smoke tests against dist/
         run: npm run test:smoke
       - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
       - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
         with:
           path: dist
 
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
