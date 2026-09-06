@@ -19,9 +19,11 @@ const TIER_NOTE = {
 
   <h2>How the data works</h2>
   <p>
-    Two stores that never touch each other. Skill facts are generated from the
-    installed <code>SKILL.md</code> files. The opinions are hand-written and no
-    script may write to them. They join at build time.
+    Two stores that never touch each other. Skill facts live in
+    <code>src/data/registry.json</code> — hand-maintained for now, since this
+    is the curated-10 stage of the project; a future importer will generate
+    it from installed <code>SKILL.md</code> files instead. The opinions are
+    hand-written and no script may write to them. They join at build time.
   </p>
 
   <h2>Sources &amp; licences</h2>

@@ -3,13 +3,19 @@
 A curated catalogue of agent skills. Not an installer — a review site:
 which skills are worth using, why, and when not to.
 
-**Live:** https://peterlwkww-ai.github.io/skill-atlas/
+**Planned URL (not yet published):** https://peterlwkww-ai.github.io/skill-atlas/
+— nothing has been deployed yet; the Pages workflow exists but the one-time
+"Settings → Pages → Source: GitHub Actions" step hasn't been done.
 
 ## Data model
 
 Two separate stores that are joined at build time:
 
-- `src/data/registry.json` — machine-generated skill facts. **Never edit by hand.**
+- `src/data/registry.json` — skill facts. **Hand-maintained for now** (subproject 1
+  scope is 5 curated skills, written by hand per spec §5.5) — hand-editing is
+  currently the only way to add a skill. It will become machine-generated once
+  the subproject 2 importer (scanning installed `SKILL.md` files) lands; at
+  that point it goes back to **never edit by hand.**
 - `src/content/notes/*.md` — hand-written opinions. **Never touched by scripts.**
 
 They join on the `skill:` field in each note's frontmatter.
