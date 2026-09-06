@@ -16,7 +16,9 @@ export function mdToSafeHtml(markdown) {
   const raw = marked.parse(markdown, { async: false, gfm: true })
   return sanitizeHtml(raw, {
     allowedTags: ALLOWED_TAGS,
-    allowedAttributes: { a: ['href', 'title'] },
+    // rel 和 target 必須列在這裡：sanitize-html 會把 transformTags 產出的屬性
+    // 再過一次 allowedAttributes，沒列到的會被靜默剝掉，下面那條 transform 就形同虛設。
+    allowedAttributes: { a: ['href', 'title', 'rel', 'target'] },
     allowedSchemes: ['http', 'https', 'mailto'],
     transformTags: {
       a: (tagName, attribs) => ({
