@@ -1,0 +1,52 @@
+---
+import { mdToSafeHtml } from '../lib/markdown.mjs'
+const { skill } = Astro.props
+const tier = skill.source?.embedTier ?? 'linkOnly'
+const full = tier === 'full' && skill.bodyMarkdown
+const excerptHtml = mdToSafeHtml(skill.bodyExcerpt)
+const fullHtml = full ? mdToSafeHtml(skill.bodyMarkdown) : ''
+---
+<section class="source-body">
+  <h2>The skill itself</h2>
+
+  <p class="official-desc">{skill.description}</p>
+
+  {skill.headings.length > 0 && (
+    <>
+      <p class="label">Structure</p>
+      <ul class="toc">{skill.headings.map(h => <li>{h}</li>)}</ul>
+    </>
+  )}
+
+  {full ? (
+    <div class="prose" set:html={fullHtml} />
+  ) : (
+    <>
+      <p class="label">Opening</p>
+      <div class="prose" set:html={excerptHtml} />
+      <p class="cta">
+        <a href={skill.sourceUrl}>Read the full skill at the source ↗</a>
+      </p>
+      {tier === 'linkOnly' && (
+        <p class="why">
+          The full text is not reproduced here: this source's licence is
+          unverified or does not permit redistribution.
+        </p>
+      )}
+    </>
+  )}
+</section>
+
+<style>
+  .source-body h2 { font-size: 17px; margin: 0 0 12px; }
+  /* 官方描述屬於「技能本身」這一節，不屬於手寫心得那一欄 */
+  .official-desc { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+  .label { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px; }
+  .toc { margin: 0; padding-left: 18px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px; color: var(--muted); }
+  .prose { font-size: 14px; }
+  .prose :global(pre) { background: var(--card); padding: 10px 12px; border-radius: 6px; overflow-x: auto; }
+  .prose :global(table) { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
+  .prose :global(td), .prose :global(th) { border: 1px solid var(--line); padding: 5px 8px; text-align: left; }
+  .cta { margin: 14px 0 0; font-size: 13px; }
+  .why { margin: 6px 0 0; font-size: 12px; color: var(--muted); }
+</style>

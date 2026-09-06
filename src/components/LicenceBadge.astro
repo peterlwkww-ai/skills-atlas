@@ -1,0 +1,12 @@
+---
+const { source } = Astro.props
+---
+<p class="licence">
+  {source.name} — {source.licence}
+  {source.licenceUrl && <> (<a href={source.licenceUrl}>licence ↗</a>)</>}
+  &nbsp;·&nbsp; <a href={source.repo}>source repository ↗</a>
+</p>
+
+<style>
+  .licence { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+</style>

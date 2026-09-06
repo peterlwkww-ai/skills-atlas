@@ -1,0 +1,79 @@
+---
+import Base from '../../layouts/Base.astro'
+import SourceBody from '../../components/SourceBody.astro'
+import LicenceBadge from '../../components/LicenceBadge.astro'
+import registry from '../../data/registry.json'
+import { getCollection } from 'astro:content'
+import { joinSkills } from '../../lib/join.mjs'
+import { mdToSafeHtml } from '../../lib/markdown.mjs'
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes')
+  return joinSkills(registry, notes).map(skill => ({
+    params: { id: skill.id },
+    props: { skill },
+  }))
+}
+
+const { skill } = Astro.props
+const n = skill.note
+const noteHtml = n ? mdToSafeHtml(n.body) : ''
+---
+<Base title={skill.name} description={n?.verdict ?? skill.description}>
+  <header class="detail-head">
+    <h1>{skill.name}</h1>
+    <p class="head-meta">
+      {skill.source?.name} v{skill.version} · {skill.category}
+      {n && <> · {'★'.repeat(n.rating)} · used {n.frequency} · <strong>#{n.rank} my pick</strong></>}
+    </p>
+    <div class="cmd">
+      <code>{skill.command}</code>
+      <button type="button" id="copy" data-command={skill.command}>Copy</button>
+    </div>
+  </header>
+
+  <div class="panes">
+    <div id="pane-mine" class="pane">
+      {n ? (
+        <>
+          <section class="verdict">
+            <p class="label">The verdict</p>
+            <p class="verdict-text">{n.verdict}</p>
+          </section>
+          <div class="prose" set:html={noteHtml} />
+        </>
+      ) : (
+        <section class="no-note">
+          <p class="label">Quick facts</p>
+          <p>{skill.category} · {skill.source?.name} v{skill.version}</p>
+          <p class="muted">No notes written for this skill yet.</p>
+        </section>
+      )}
+      <LicenceBadge source={skill.source} />
+    </div>
+
+    <div id="pane-source" class="pane">
+      <SourceBody skill={skill} />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .detail-head { padding: 8px 0 20px; border-bottom: 1px solid var(--line); }
+  .detail-head h1 { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 26px; margin: 0 0 4px; }
+  .head-meta { margin: 0 0 12px; font-size: 12.5px; color: var(--muted); }
+  .cmd { display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px 6px 11px; background: var(--card); }
+  .cmd code { font-size: 13px; }
+  .cmd button { font: inherit; font-size: 12px; padding: 3px 10px; cursor: pointer; background: transparent; color: var(--accent); border: 1px solid var(--line); border-radius: 5px; }
+  .panes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 34px; padding-top: 22px; align-items: start; }
+  #pane-mine { position: sticky; top: 20px; }
+  .label { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+  .verdict-text { margin: 0 0 20px; font-size: 17px; line-height: 1.5; }
+  .prose { font-size: 14px; }
+  .prose :global(h2) { font-size: 15px; margin: 22px 0 6px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  @media (max-width: 860px) {
+    .panes { grid-template-columns: 1fr; gap: 24px; }
+    #pane-mine { position: static; }
+  }
+</style>
