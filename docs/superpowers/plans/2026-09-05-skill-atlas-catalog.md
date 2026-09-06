@@ -1262,7 +1262,8 @@ const picks = views.filter(v => v.note)
     background: color-mix(in srgb, var(--accent) 18%, transparent);
     color: var(--accent); font-weight: 600;
   }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
 </style>
 ```
 
@@ -1598,7 +1599,8 @@ const tags = [...new Set(views.flatMap(v => v.note?.tags ?? []))].sort()
     background: color-mix(in srgb, var(--accent) 18%, transparent);
     color: var(--accent); font-weight: 600;
   }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
   .all-layout { display: flex; gap: 24px; align-items: flex-start; }
   .all-main { flex: 1; min-width: 0; }
   .count { margin: 0 0 8px; font-size: 12px; color: var(--muted); }
