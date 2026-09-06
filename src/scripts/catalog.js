@@ -99,7 +99,9 @@ function runSearch(query) {
   applyFilters()
 }
 
-const indexUrl = new URL('search-index.json', document.baseURI)
+// 用 BASE_URL 而不是 document.baseURI：後者是相對於「目前這一頁」解析的，
+// 只有在腳本剛好掛在 base 根目錄時才會對。Vite 會在建置期把 BASE_URL 換成字面值。
+const indexUrl = new URL(`${import.meta.env.BASE_URL}search-index.json`, location.origin)
 fetch(indexUrl)
   .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
   .then(entries => {
