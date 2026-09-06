@@ -1,0 +1,55 @@
+---
+const { sources, frequencies, tags } = Astro.props
+---
+<div id="filters">
+  <fieldset>
+    <legend>Source</legend>
+    {sources.map(s => (
+      <label><input type="checkbox" name="source" value={s.id} /> {s.name}</label>
+    ))}
+  </fieldset>
+
+  <fieldset>
+    <legend>Minimum rating</legend>
+    <label><input type="radio" name="rating" value="0" checked /> Any</label>
+    <label><input type="radio" name="rating" value="4" /> ★★★★+</label>
+    <label><input type="radio" name="rating" value="5" /> ★★★★★</label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Frequency</legend>
+    {frequencies.map(f => (
+      <label><input type="checkbox" name="frequency" value={f} /> {f}</label>
+    ))}
+  </fieldset>
+
+  {tags.length > 0 && (
+    <fieldset>
+      <legend>Tags</legend>
+      {tags.map(t => (
+        <label><input type="checkbox" name="tag" value={t} /> {t}</label>
+      ))}
+    </fieldset>
+  )}
+
+  <fieldset>
+    <legend>Notes</legend>
+    <label><input type="checkbox" name="curated" value="true" /> Has my notes</label>
+  </fieldset>
+
+  <button type="button" id="clear-filters">Clear all</button>
+</div>
+
+<style>
+  #filters { width: 170px; flex: none; font-size: 12px; }
+  #filters fieldset { border: 0; border-top: 1px solid var(--line); margin: 0 0 12px; padding: 10px 0 0; }
+  #filters legend {
+    padding: 0; font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted);
+  }
+  #filters label { display: block; padding: 2px 0; cursor: pointer; }
+  #clear-filters {
+    font: inherit; font-size: 12px; padding: 4px 10px; cursor: pointer;
+    background: transparent; color: var(--fg); border: 1px solid var(--line); border-radius: 5px;
+  }
+  @media (max-width: 860px) { #filters { width: 100%; } }
+</style>

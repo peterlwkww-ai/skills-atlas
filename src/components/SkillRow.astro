@@ -1,0 +1,40 @@
+---
+import { href } from '../lib/url.mjs'
+const base = import.meta.env.BASE_URL
+const { skill } = Astro.props
+const n = skill.note
+---
+<a
+  class="row"
+  href={href(base, `/skills/${skill.id}/`)}
+  data-skill-id={skill.id}
+  data-source={skill.source?.id}
+  data-rating={n ? String(n.rating) : '0'}
+  data-frequency={n ? n.frequency : ''}
+  data-tags={n ? n.tags.join(' ') : ''}
+  data-curated={n ? 'true' : 'false'}
+>
+  <span class="row-name">{skill.name}</span>
+  <span class="row-source">{skill.source?.name}</span>
+  <span class="row-stars">{n ? '★'.repeat(n.rating) : '—'}</span>
+  <span class="row-text">{n ? n.verdict : skill.description}</span>
+</a>
+
+<style>
+  .row {
+    display: grid; grid-template-columns: 190px 130px 70px 1fr; gap: 12px;
+    align-items: baseline; padding: 8px 12px; text-decoration: none; color: var(--fg);
+    border-bottom: 1px solid var(--line); font-size: 13px;
+  }
+  .row:hover { background: var(--card); }
+  .row-name { font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .row-source { color: var(--muted); font-size: 11px; }
+  .row-stars { color: var(--star); font-size: 11px; }
+  .row-text {
+    color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  @media (max-width: 700px) {
+    .row { grid-template-columns: 1fr auto; }
+    .row-source, .row-text { display: none; }
+  }
+</style>

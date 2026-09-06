@@ -1,0 +1,73 @@
+// 目錄頁的模式切換與篩選。純 DOM 操作 —— 不重新請求資料，
+// 所以搜尋索引載入失敗時篩選仍然可用（spec §9）。
+
+const params = new URLSearchParams(location.search)
+const picks = document.getElementById('picks')
+const all = document.getElementById('all')
+const switcher = document.getElementById('mode-switch')
+
+function setMode(mode, push) {
+  const isAll = mode === 'all'
+  picks.hidden = isAll
+  all.hidden = !isAll
+  for (const btn of switcher.querySelectorAll('button')) {
+    const active = btn.dataset.mode === mode
+    btn.classList.toggle('active', active)
+    btn.setAttribute('aria-pressed', String(active))
+  }
+  if (push) {
+    const url = new URL(location.href)
+    if (isAll) url.searchParams.set('view', 'all')
+    else url.searchParams.delete('view')
+    history.replaceState(null, '', url)
+  }
+}
+
+switcher.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-mode]')
+  if (btn) setMode(btn.dataset.mode, true)
+})
+
+setMode(params.get('view') === 'all' ? 'all' : 'picks', false)
+
+// ── 篩選 ────────────────────────────────────────────────────────────────
+const filters = document.getElementById('filters')
+const rows = [...document.querySelectorAll('#rows .row')]
+
+function checkedValues(name) {
+  return [...filters.querySelectorAll(`input[name="${name}"]:checked`)].map(i => i.value)
+}
+
+export function applyFilters() {
+  const sources = checkedValues('source')
+  const frequencies = checkedValues('frequency')
+  const tags = checkedValues('tag')
+  const curatedOnly = checkedValues('curated').length > 0
+  const minRating = Number(filters.querySelector('input[name="rating"]:checked')?.value ?? 0)
+
+  let shown = 0
+  for (const row of rows) {
+    const rowTags = (row.dataset.tags || '').split(' ').filter(Boolean)
+    const ok =
+      (sources.length === 0 || sources.includes(row.dataset.source)) &&
+      (frequencies.length === 0 || frequencies.includes(row.dataset.frequency)) &&
+      (tags.length === 0 || tags.some(t => rowTags.includes(t))) &&
+      (!curatedOnly || row.dataset.curated === 'true') &&
+      Number(row.dataset.rating) >= minRating &&
+      row.dataset.searchHidden !== 'true'
+
+    row.hidden = !ok
+    if (ok) shown++
+  }
+  document.getElementById('result-count').textContent =
+    `${shown} of ${rows.length} skills`
+}
+
+filters.addEventListener('change', applyFilters)
+document.getElementById('clear-filters').addEventListener('click', () => {
+  for (const i of filters.querySelectorAll('input[type="checkbox"]')) i.checked = false
+  filters.querySelector('input[name="rating"][value="0"]').checked = true
+  applyFilters()
+})
+
+applyFilters()

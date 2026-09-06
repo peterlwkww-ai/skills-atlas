@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro'
 import SkillCard from '../components/SkillCard.astro'
+import SkillRow from '../components/SkillRow.astro'
+import FilterPanel from '../components/FilterPanel.astro'
 import registry from '../data/registry.json'
 import { getCollection } from 'astro:content'
 import { joinSkills, sortForCatalogue } from '../lib/join.mjs'
@@ -8,6 +10,9 @@ import { joinSkills, sortForCatalogue } from '../lib/join.mjs'
 const notes = await getCollection('notes')
 const views = sortForCatalogue(joinSkills(registry, notes))
 const picks = views.filter(v => v.note)
+
+const frequencies = ['daily', 'weekly', 'monthly', 'rare']
+const tags = [...new Set(views.flatMap(v => v.note?.tags ?? []))].sort()
 ---
 <Base title="Skills">
   <h1>Skills worth using</h1>
@@ -24,7 +29,21 @@ const picks = views.filter(v => v.note)
   <div id="picks" class="grid">
     {picks.map(skill => <SkillCard skill={skill} />)}
   </div>
+
+  <div id="all" hidden>
+    <div class="all-layout">
+      <FilterPanel sources={registry.sources} frequencies={frequencies} tags={tags} />
+      <div class="all-main">
+        <p id="result-count" class="count">{views.length} of {views.length} skills</p>
+        <div id="rows">
+          {views.map(skill => <SkillRow skill={skill} />)}
+        </div>
+      </div>
+    </div>
+  </div>
 </Base>
+
+<script src="../scripts/catalog.js"></script>
 
 <style>
   .lede { color: var(--muted); max-width: 62ch; }
@@ -39,4 +58,9 @@ const picks = views.filter(v => v.note)
   }
   .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
   @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+  .all-layout { display: flex; gap: 24px; align-items: flex-start; }
+  .all-main { flex: 1; min-width: 0; }
+  .count { margin: 0 0 8px; font-size: 12px; color: var(--muted); }
+  #rows { border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+  @media (max-width: 860px) { .all-layout { flex-direction: column; } }
 </style>
