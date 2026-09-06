@@ -2230,7 +2230,10 @@ copyBtn?.addEventListener('click', async () => {
 在該檔 `<style>` 內加入：
 
 ```css
-  #tabs { display: flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; margin: 18px 0 0; width: max-content; }
+  /* :not([hidden]) 不能省：作者端寫的 display 會蓋過瀏覽器對 [hidden] 的
+     display:none，少了這個限定，分頁籤在桌機和無 JS 的情況下都會照樣顯示，
+     而且桌機一點下去就會把左欄藏起來、破壞雙欄版面。*/
+  #tabs:not([hidden]) { display: flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; margin: 18px 0 0; width: max-content; }
   #tabs button { padding: 7px 16px; font: inherit; font-size: 13px; border: 0; cursor: pointer; background: transparent; color: var(--fg); }
   #tabs button.active { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); font-weight: 600; }
 ```
