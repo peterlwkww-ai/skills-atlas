@@ -157,7 +157,7 @@ skill-atlas/
 | `version` | 是 | 同一技能存在多版本時取最新（作者本機同時有 superpowers 6.2.0 與 6.3.0） |
 | `description` | 是 | SKILL.md frontmatter 的 `description` |
 | `headings` | 是 | 從內文抽出的 `##` 標題。**不能轉載全文時，這是讀者判斷技能份量的唯一依據。** |
-| `bodyExcerpt` | 是 | **前 40 行或前 2000 字元，取先到者**，並在最後一個完整段落邊界截斷。任何授權等級都顯示（合理引用範圍）。 |
+| `bodyExcerpt` | 是 | **前 40 行或前 2000 字元，取先到者**，並在最後一個完整段落邊界截斷。**欄位一律產生，但只在 `embedTier` 為 `full` 或 `excerpt` 時顯示**；`linkOnly` 不顯示任何內文（見 §5.2）。 |
 | `bodyMarkdown` | 是（可為 `null`） | 欄位必須存在。僅 `embedTier: "full"` 時填內容，其餘必須是 `null`。 |
 | `sourceUrl` | 是 | 指回原始 SKILL.md |
 
@@ -173,9 +173,13 @@ skill-atlas/
 
 **預設值是 `linkOnly`。** 匯入腳本在無法判定授權時不得猜測。
 
+**`linkOnly` 不顯示任何內文，節錄也不行。** §5.1 的欄位表原本寫「任何授權等級都顯示」，與本表矛盾；以本表為準 —— 這是授權表，而且較保守的一側才符合「無法判定就不猜」的原則。
+
 署名格式（`full` 與 `excerpt` 共用，由 `LicenceBadge.astro` 產生）：
 
 > *task-observer by Eoghan Henn — CC BY 4.0 · [source ↗](…)*
+
+**署名必須含作者。** `sources[]` 需要一個 `author` 欄位，在 `embedTier` 為 `full` 或 `excerpt` 時必填 —— CC BY 4.0 第 3(a)(1)(A) 條要求保留創作者標示，只印來源專案名稱不算數。`linkOnly` 可為 `null`。
 
 ### 5.3 `src/content/notes/<source>--<name>.md`
 
