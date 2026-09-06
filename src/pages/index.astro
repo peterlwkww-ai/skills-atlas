@@ -21,6 +21,14 @@ const tags = [...new Set(views.flatMap(v => v.note?.tags ?? []))].sort()
     place, and when to leave it alone.
   </p>
 
+  <input
+    type="search"
+    id="search"
+    placeholder="Search skills…"
+    autocomplete="off"
+    aria-label="Search skills"
+  />
+
   <div id="mode-switch" role="group" aria-label="View mode">
     <button type="button" data-mode="picks" class="active" aria-pressed="true">★ My picks ({picks.length})</button>
     <button type="button" data-mode="all" aria-pressed="false">All {views.length}</button>
@@ -47,6 +55,13 @@ const tags = [...new Set(views.flatMap(v => v.note?.tags ?? []))].sort()
 
 <style>
   .lede { color: var(--muted); max-width: 62ch; }
+  #search {
+    display: block; width: 100%; max-width: 420px; margin-top: 18px;
+    padding: 8px 12px; font: inherit; font-size: 14px;
+    background: var(--bg); color: var(--fg);
+    border: 1px solid var(--line); border-radius: 7px;
+  }
+  #search:disabled { opacity: .5; }
   #mode-switch { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; margin: 20px 0 18px; }
   #mode-switch button {
     padding: 7px 15px; font: inherit; font-size: 13px; border: 0; cursor: pointer;

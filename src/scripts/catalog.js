@@ -71,3 +71,51 @@ document.getElementById('clear-filters').addEventListener('click', () => {
 })
 
 applyFilters()
+
+// ── 搜尋 ────────────────────────────────────────────────────────────────
+// 索引載入失敗時只停用搜尋框，篩選器仍然可用（spec §9）。
+import Fuse from 'fuse.js'
+
+const searchInput = document.getElementById('search')
+const cards = [...document.querySelectorAll('#picks .card')]
+let fuse = null
+
+function clearSearch() {
+  for (const el of [...rows, ...cards]) delete el.dataset.searchHidden
+  // 卡片的可見性是這支腳本直接設的，applyFilters() 只管 rows，
+  // 所以清空搜尋時必須自己把卡片放回來，否則它們會永遠留在隱藏狀態。
+  for (const card of cards) card.hidden = false
+}
+
+function runSearch(query) {
+  if (!fuse) return
+  if (!query.trim()) { clearSearch(); applyFilters(); return }
+
+  const hits = new Set(fuse.search(query).map(r => r.item.id))
+  for (const el of [...rows, ...cards]) {
+    el.dataset.searchHidden = hits.has(el.dataset.skillId) ? 'false' : 'true'
+  }
+  for (const card of cards) card.hidden = card.dataset.searchHidden === 'true'
+  applyFilters()
+}
+
+const indexUrl = new URL('search-index.json', document.baseURI)
+fetch(indexUrl)
+  .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
+  .then(entries => {
+    fuse = new Fuse(entries, {
+      threshold: 0.3,
+      keys: ['name', 'description', 'verdict', 'tags'],
+    })
+  })
+  .catch(err => {
+    console.warn('search index unavailable, search disabled:', err)
+    searchInput.disabled = true
+    searchInput.placeholder = 'Search unavailable'
+  })
+
+let timer
+searchInput.addEventListener('input', () => {
+  clearTimeout(timer)
+  timer = setTimeout(() => runSearch(searchInput.value), 200)
+})
