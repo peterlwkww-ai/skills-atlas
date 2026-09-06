@@ -17,8 +17,10 @@ test('rule 1: rejects an id that is not <sourceId>/<name>', () => {
 })
 
 test('rule 1: rejects a skill whose sourceId is not in sources[]', () => {
-  const errors = validateRegistry(fixture('registry-bad-id-format.json'))
-  assert.ok(Array.isArray(errors))
+  const errors = validateRegistry(fixture('registry-orphan-source-id.json'))
+  assert.ok(
+    errors.some(e => /sourceId "ghost" is not declared/i.test(e)),
+    `expected an undeclared-sourceId error, got: ${errors}`)
 })
 
 test('rule 5: rejects a source missing a required field', () => {

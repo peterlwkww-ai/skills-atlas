@@ -1,0 +1,9 @@
+{
+  "generatedAt": "2026-09-05",
+  "sources": [
+    { "id": "s", "name": "S", "repo": "https://example.com/s", "licence": "MIT", "licenceUrl": "https://example.com/s/LICENSE", "embedTier": "full" }
+  ],
+  "skills": [
+    { "id": "ghost/a", "name": "a", "command": "/ghost:a", "sourceId": "ghost", "version": "1", "category": "X", "description": "d", "headings": [], "bodyExcerpt": "e", "bodyMarkdown": null, "sizeBytes": 1, "sourceUrl": "https://example.com/ghost/a" }
+  ]
+}
