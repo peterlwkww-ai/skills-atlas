@@ -909,11 +909,12 @@ export function joinSkills(registry, notes) {
 
   return registry.skills.map(skill => {
     const note = noteBySkill.get(skill.id) ?? null
+    const source = sourceById.get(skill.sourceId) ?? null
     return {
       id: skill.id,
       name: skill.name,
       command: skill.command,
-      source: sourceById.get(skill.sourceId) ?? null,
+      source,
       version: skill.version,
       category: skill.category,
       description: skill.description,
@@ -2298,6 +2299,21 @@ test('the about page lists every source with its licence and tier', async () => 
   }
 })
 
+test('every source row explains what its tier means, in words', async () => {
+  const html = await readFile('dist/about/index.html', 'utf8')
+  const NOTES = {
+    full: 'Full text reproduced here',
+    excerpt: 'Opening excerpt only',
+    linkOnly: 'Metadata and structure only',
+  }
+  const registry = JSON.parse(await readFile('src/data/registry.json', 'utf8'))
+  for (const source of registry.sources) {
+    assert.ok(NOTES[source.embedTier], `no expected prose for tier "${source.embedTier}"`)
+    assert.ok(html.includes(NOTES[source.embedTier]),
+      `about page never explains tier "${source.embedTier}" (source ${source.id})`)
+  }
+})
+
 test('a superpowers skill links to the guided walkthrough', async () => {
   const html = await readFile('dist/skills/superpowers/brainstorming/index.html', 'utf8')
   assert.match(html, /Superpowers-guide\/#\/skill\/brainstorming/)
@@ -2329,8 +2345,8 @@ Expected: 三條新測試 FAIL
 在 `joinSkills` 回傳物件中，`sourceUrl` 之後加入一行：
 
 ```js
-      guideUrl: sourceById.get(skill.sourceId)?.guideUrlTemplate
-        ? sourceById.get(skill.sourceId).guideUrlTemplate.replace('{name}', skill.name)
+      guideUrl: source?.guideUrlTemplate
+        ? source.guideUrlTemplate.replace('{name}', skill.name)
         : null,
 ```
 
@@ -2398,7 +2414,9 @@ const TIER_NOTE = {
           <td><a href={s.repo}>{s.name} ↗</a></td>
           <td>{s.licenceUrl ? <a href={s.licenceUrl}>{s.licence} ↗</a> : s.licence}</td>
           <td><code>{s.embedTier}</code></td>
-          <td>{TIER_NOTE[s.embedTier]}</td>
+          {/* fallback 不能省：TIER_NOTE 和 schema.mjs 的 EMBED_TIERS 是兩份各自獨立的
+              清單，哪天只加了一邊，這一格就會靜默空白 —— 而這一格正是整張授權表的重點。*/}
+          <td>{TIER_NOTE[s.embedTier] ?? `Unrecognised tier "${s.embedTier}" — no description available.`}</td>
         </tr>
       ))}
     </tbody>
