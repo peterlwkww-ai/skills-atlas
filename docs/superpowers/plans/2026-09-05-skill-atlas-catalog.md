@@ -1902,7 +1902,9 @@ export function mdToSafeHtml(markdown) {
   const raw = marked.parse(markdown, { async: false, gfm: true })
   return sanitizeHtml(raw, {
     allowedTags: ALLOWED_TAGS,
-    allowedAttributes: { a: ['href', 'title'] },
+    // rel 和 target 必須列在這裡：sanitize-html 會把 transformTags 產出的屬性
+    // 再過一次 allowedAttributes，沒列到的會被靜默剝掉，下面那條 transform 就形同虛設。
+    allowedAttributes: { a: ['href', 'title', 'rel', 'target'] },
     allowedSchemes: ['http', 'https', 'mailto'],
     transformTags: {
       a: (tagName, attribs) => ({
@@ -1918,13 +1920,20 @@ export function mdToSafeHtml(markdown) {
 
 ```astro
 ---
+// source 可能是 null：joinSkills 對查不到的 sourceId 會回 null。
+// 建置期的 validate.mjs 會擋掉這種資料，但 astro dev 不跑 validate，
+// 這一層仍要自己站得住，不能靠上游保證。
 const { source } = Astro.props
 ---
-<p class="licence">
-  {source.name} — {source.licence}
-  {source.licenceUrl && <> (<a href={source.licenceUrl}>licence ↗</a>)</>}
-  &nbsp;·&nbsp; <a href={source.repo}>source repository ↗</a>
-</p>
+{source ? (
+  <p class="licence">
+    {source.name} — {source.licence}
+    {source.licenceUrl && <> (<a href={source.licenceUrl}>licence ↗</a>)</>}
+    &nbsp;·&nbsp; <a href={source.repo}>source repository ↗</a>
+  </p>
+) : (
+  <p class="licence">Source unknown — this skill's origin is not recorded.</p>
+)}
 
 <style>
   .licence { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
