@@ -1,0 +1,9 @@
+{
+  "generatedAt": "2026-09-05",
+  "sources": [
+    { "id": "s", "name": "S", "repo": "https://example.com/s", "licence": "unknown", "licenceUrl": null, "embedTier": "linkOnly" }
+  ],
+  "skills": [
+    { "id": "s/a", "name": "a", "command": "/s:a", "sourceId": "s", "version": "1", "category": "X", "description": "d", "headings": [], "bodyExcerpt": "e", "bodyMarkdown": "FULL TEXT THAT MUST NOT BE HERE", "sizeBytes": 1, "sourceUrl": "https://example.com/s/a" }
+  ]
+}
