@@ -12,7 +12,7 @@ which skills are worth using, why, and when not to.
 Two separate stores that are joined at build time:
 
 - `src/data/registry.json` — skill facts. **Hand-maintained for now** (subproject 1
-  scope is 5 curated skills, written by hand per spec §5.5) — hand-editing is
+  targets 10 curated skills; 5 are currently in the registry, written by hand per spec §5.5) — hand-editing is
   currently the only way to add a skill. It will become machine-generated once
   the subproject 2 importer (scanning installed `SKILL.md` files) lands; at
   that point it goes back to **never edit by hand.**

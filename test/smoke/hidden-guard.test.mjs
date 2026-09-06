@@ -17,7 +17,7 @@ import path from 'node:path'
 // instances, precisely because scoping the fix to only what was reported is
 // what let the same bug recur three times on this project. Any element
 // added later to the toggle list below is covered automatically.
-const TOGGLED_SELECTORS = ['#picks', '#all', '#tabs', '#pane-mine', '#pane-source', '.row', '.card']
+const TOGGLED_SELECTORS = ['#picks', '#all', '#tabs', '#pane-mine', '#pane-source', '.row', '.card', '.grid']
 
 const DIST = 'dist'
 
