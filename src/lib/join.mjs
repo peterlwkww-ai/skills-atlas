@@ -60,11 +60,12 @@ export function joinSkills(registry, notes) {
 
   return registry.skills.map(skill => {
     const note = noteBySkill.get(skill.id) ?? null
+    const source = sourceById.get(skill.sourceId) ?? null
     return {
       id: skill.id,
       name: skill.name,
       command: skill.command,
-      source: sourceById.get(skill.sourceId) ?? null,
+      source,
       version: skill.version,
       category: skill.category,
       description: skill.description,
@@ -72,8 +73,8 @@ export function joinSkills(registry, notes) {
       bodyExcerpt: skill.bodyExcerpt,
       bodyMarkdown: skill.bodyMarkdown ?? null,
       sourceUrl: skill.sourceUrl,
-      guideUrl: sourceById.get(skill.sourceId)?.guideUrlTemplate
-        ? sourceById.get(skill.sourceId).guideUrlTemplate.replace('{name}', skill.name)
+      guideUrl: source?.guideUrlTemplate
+        ? source.guideUrlTemplate.replace('{name}', skill.name)
         : null,
       note: note
         ? {

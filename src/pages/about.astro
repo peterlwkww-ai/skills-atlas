@@ -41,7 +41,9 @@ const TIER_NOTE = {
           <td><a href={s.repo}>{s.name} ↗</a></td>
           <td>{s.licenceUrl ? <a href={s.licenceUrl}>{s.licence} ↗</a> : s.licence}</td>
           <td><code>{s.embedTier}</code></td>
-          <td>{TIER_NOTE[s.embedTier]}</td>
+          {/* fallback 不能省：TIER_NOTE 和 schema.mjs 的 EMBED_TIERS 是兩份各自獨立的
+              清單，哪天只加了一邊，這一格就會靜默空白 —— 而這一格正是整張授權表的重點。*/}
+          <td>{TIER_NOTE[s.embedTier] ?? `Unrecognised tier "${s.embedTier}" — no description available.`}</td>
         </tr>
       ))}
     </tbody>
