@@ -49,6 +49,18 @@ const tags = [...new Set(views.flatMap(v => v.note?.tags ?? []))].sort()
       </div>
     </div>
   </div>
+
+  <noscript>
+    <style>
+      /* Without JS, catalog.js never runs setMode(), so #all stays hidden
+         and every uncurated skill is unreachable (spec §9 promises the
+         no-JS loss is filtering and search only, not entire sections).
+         Show All and hide the now-inert mode switch — never both sections
+         at once, so a JS reader never sees a flash of both. */
+      #all { display: block !important; }
+      #mode-switch { display: none; }
+    </style>
+  </noscript>
 </Base>
 
 <script src="../scripts/catalog.js"></script>
@@ -71,7 +83,10 @@ const tags = [...new Set(views.flatMap(v => v.note?.tags ?? []))].sort()
     background: color-mix(in srgb, var(--accent) 18%, transparent);
     color: var(--accent); font-weight: 600;
   }
-  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  /* :not([hidden]) is required: an unconditional author `display` here would
+     outrank the browser's default [hidden] { display: none } rule, so
+     catalog.js's picks.hidden = isAll would stop hiding anything. */
+  .grid:not([hidden]) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
   @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
   .all-layout { display: flex; gap: 24px; align-items: flex-start; }
   .all-main { flex: 1; min-width: 0; }

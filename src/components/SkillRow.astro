@@ -21,7 +21,10 @@ const n = skill.note
 </a>
 
 <style>
-  .row {
+  /* :not([hidden]) is required: an unconditional author `display` here would
+     outrank the browser's default [hidden] { display: none } rule, so
+     catalog.js's row.hidden = !ok would stop hiding anything. */
+  .row:not([hidden]) {
     display: grid; grid-template-columns: 190px 130px 70px 1fr; gap: 12px;
     align-items: baseline; padding: 8px 12px; text-decoration: none; color: var(--fg);
     border-bottom: 1px solid var(--line); font-size: 13px;
