@@ -25,6 +25,41 @@ test('rule 3: two notes with the same rank is an error', () => {
   assert.ok(errors.some(e => /duplicate rank/i.test(e)), `got: ${errors}`)
 })
 
+test('rule 3: a note with rank 1 and a note with rank "1" no longer silently pass as distinct ranks', () => {
+  const notes = [
+    {
+      id: 'superpowers--brainstorming',
+      data: { skill: 'superpowers/brainstorming', rank: 1, rating: 5, frequency: 'weekly', tags: [], verdict: 'V' },
+      body: 'text',
+    },
+    {
+      id: 'superpowers--systematic-debugging',
+      data: { skill: 'superpowers/systematic-debugging', rank: '1', rating: 5, frequency: 'weekly', tags: [], verdict: 'V' },
+      body: 'text',
+    },
+  ]
+  const errors = validateNotes(registry, notes)
+  // A Map keyed on the raw value would treat 1 and "1" as different keys and
+  // report nothing (the bug). The validated fix rejects the quoted rank
+  // outright, so this pair must produce an error naming the offending note —
+  // it must NOT come back as [].
+  assert.ok(
+    errors.some(e => /rank must be an integer/.test(e) && /superpowers--systematic-debugging/.test(e)),
+    `got: ${errors}`)
+})
+
+test('rule 3: a non-integer rank is rejected outright', () => {
+  const notes = [{
+    id: 'superpowers--writing-plans',
+    data: { skill: 'superpowers/writing-plans', rank: '1', rating: 5, frequency: 'weekly', tags: [], verdict: 'V' },
+    body: 'text',
+  }]
+  const errors = validateNotes(registry, notes)
+  assert.ok(
+    errors.some(e => /rank must be an integer/.test(e) && /superpowers--writing-plans/.test(e)),
+    `got: ${errors}`)
+})
+
 test('rule 4: bodyMarkdown set on a source that is not embedTier full is an error', () => {
   const bad = JSON.parse(readFileSync(
     new URL('../fixtures/registry-embed-without-licence.json', import.meta.url), 'utf8'))

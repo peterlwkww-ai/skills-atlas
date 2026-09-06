@@ -17,7 +17,8 @@ export function validateNotes(registry, notes) {
     }
   }
 
-  // 規則 3：rank 唯一
+  // 規則 3：rank 唯一。型別先驗 —— notes 由人手寫，YAML 裡的 `rank: "1"`
+  // 和 `rank: 1` 是同一個名次，但 Map 鍵不會自動轉型，會讓重複悄悄溜過。
   const seenRank = new Map()
   for (const note of notes) {
     const rank = note.data?.rank
@@ -25,8 +26,15 @@ export function validateNotes(registry, notes) {
       errors.push(`note "${note.id}": missing required frontmatter field "rank"`)
       continue
     }
+    if (typeof rank !== 'number' || !Number.isInteger(rank) || rank < 1) {
+      errors.push(
+        `note "${note.id}": rank must be an integer >= 1, got ${JSON.stringify(rank)} ` +
+        `(${typeof rank}) — quote-free numbers only in frontmatter`)
+      continue
+    }
     if (seenRank.has(rank)) {
       errors.push(`duplicate rank ${rank}: "${seenRank.get(rank)}" and "${note.id}"`)
+      continue
     }
     seenRank.set(rank, note.id)
   }
