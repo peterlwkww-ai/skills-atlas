@@ -2485,11 +2485,21 @@ MSG
 // 手動執行：npm run check-links
 import { readFileSync } from 'node:fs'
 
-const registry = JSON.parse(readFileSync(new URL('../src/data/registry.json', import.meta.url), 'utf8'))
-const targets = [
-  ...registry.sources.flatMap(s => [s.repo, s.licenceUrl].filter(Boolean)),
-  ...registry.skills.map(s => s.sourceUrl),
-]
+// 這支腳本承諾永遠不以非零碼結束，連讀不到或解析不了 registry 也一樣。
+// 少了這層保護，ESM 頂層丟出的例外會讓 Node 以非零碼退出，等於把一個
+// 手動工具變成擋事的東西 —— 而它被排除在 CI 之外正是為了不擋事。
+let targets = []
+try {
+  const registry = JSON.parse(readFileSync(new URL('../src/data/registry.json', import.meta.url), 'utf8'))
+  targets = [
+    ...registry.sources.flatMap(s => [s.repo, s.licenceUrl].filter(Boolean)),
+    ...registry.skills.map(s => s.sourceUrl),
+  ]
+} catch (err) {
+  console.error(`could not read src/data/registry.json — ${err.message}`)
+  console.error('nothing to check; this script never fails the build.')
+  process.exit(0)
+}
 
 let bad = 0
 for (const url of [...new Set(targets)]) {
