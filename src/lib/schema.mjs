@@ -31,6 +31,13 @@ export function validateRegistry(registry) {
     if (src?.embedTier === 'full' || src?.embedTier === 'excerpt') {
       if (!src.licenceUrl) errors.push(`${label}: licenceUrl is required when embedTier is "${src.embedTier}"`)
     }
+    // author 比照 licenceUrl：full / excerpt 必填非空字串（CC BY 4.0 §3(a)(1)(A)
+    // 要求保留創作者標示），linkOnly 可為 null —— 查不到授權檔往往也查不到作者
+    if (src?.embedTier === 'full' || src?.embedTier === 'excerpt') {
+      if (typeof src.author !== 'string' || src.author === '') {
+        errors.push(`${label}: author is required (non-empty string) when embedTier is "${src.embedTier}"`)
+      }
+    }
     if (src?.id) {
       if (sourceIds.has(src.id)) errors.push(`duplicate source id "${src.id}"`)
       sourceIds.add(src.id)

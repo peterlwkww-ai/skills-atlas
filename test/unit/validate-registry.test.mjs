@@ -33,6 +33,16 @@ test('rule 5: rejects an embedTier outside the three enum values', () => {
   assert.ok(errors.some(e => /embedTier/i.test(e)), `expected an embedTier error, got: ${errors}`)
 })
 
+// Finding 5 (final review, feat/catalogue): attribution must survive into
+// the schema, not just the rendered page — CC BY 4.0 §3(a)(1)(A) requires
+// retaining creator identification, so a full-tier source with no author
+// must fail validation the same way a full-tier source with no licenceUrl
+// already does.
+test('rule 5: rejects a full-tier source missing author', () => {
+  const errors = validateRegistry(fixture('registry-full-missing-author.json'))
+  assert.ok(errors.some(e => /author/i.test(e)), `expected an author error, got: ${errors}`)
+})
+
 test('the real registry passes', () => {
   const real = JSON.parse(readFileSync(new URL('../../src/data/registry.json', import.meta.url), 'utf8'))
   assert.deepEqual(validateRegistry(real), [])

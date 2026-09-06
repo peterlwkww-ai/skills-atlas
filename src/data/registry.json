@@ -8,6 +8,7 @@
       "licence": "MIT",
       "licenceUrl": "https://github.com/obra/superpowers/blob/main/LICENSE",
       "embedTier": "full",
+      "author": "obra",
       "guideUrlTemplate": "https://peterlwkww-ai.github.io/Superpowers-guide/#/skill/{name}"
     },
     {
@@ -16,7 +17,8 @@
       "repo": "https://github.com/rebelytics/one-skill-to-rule-them-all",
       "licence": "CC BY 4.0",
       "licenceUrl": "https://creativecommons.org/licenses/by/4.0/",
-      "embedTier": "full"
+      "embedTier": "full",
+      "author": "Eoghan Henn"
     },
     {
       "id": "anthropic",
@@ -24,7 +26,8 @@
       "repo": "https://github.com/anthropics/skills",
       "licence": "unknown",
       "licenceUrl": null,
-      "embedTier": "linkOnly"
+      "embedTier": "linkOnly",
+      "author": null
     }
   ],
   "skills": [

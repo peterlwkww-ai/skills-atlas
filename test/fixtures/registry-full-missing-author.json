@@ -1,0 +1,7 @@
+{
+  "generatedAt": "2026-09-05",
+  "sources": [
+    { "id": "s", "name": "S", "repo": "https://example.com/s", "licence": "MIT", "licenceUrl": "https://example.com/s/LICENSE", "embedTier": "full" }
+  ],
+  "skills": []
+}

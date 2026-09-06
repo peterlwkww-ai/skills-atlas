@@ -6,7 +6,7 @@ const { source } = Astro.props
 ---
 {source ? (
   <p class="licence">
-    {source.name} — {source.licence}
+    {source.author ? <>{source.name} by {source.author}</> : source.name} — {source.licence}
     {source.licenceUrl && <> (<a href={source.licenceUrl}>licence ↗</a>)</>}
     &nbsp;·&nbsp; <a href={source.repo}>source repository ↗</a>
   </p>
