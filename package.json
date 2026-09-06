@@ -1,0 +1,21 @@
+{
+  "name": "skill-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "validate": "node scripts/validate.mjs",
+    "build": "node scripts/validate.mjs && astro build",
+    "test": "node --test \"test/unit/**/*.test.mjs\"",
+    "test:smoke": "node --test \"test/smoke/**/*.test.mjs\"",
+    "check-links": "node scripts/check-links.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "fuse.js": "^7.0.0",
+    "gray-matter": "^4.0.3",
+    "marked": "^15.0.0",
+    "sanitize-html": "^2.13.0"
+  }
+}

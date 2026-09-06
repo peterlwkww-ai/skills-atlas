@@ -1,0 +1,51 @@
+---
+import { href } from '../lib/url.mjs'
+const base = import.meta.env.BASE_URL
+interface Props { title: string; description?: string }
+const { title, description = 'A curated catalogue of agent skills.' } = Astro.props
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} · skill-atlas</title>
+  <meta name="description" content={description} />
+  <style is:global>
+    :root {
+      --bg: #ffffff; --fg: #1a1a1a; --muted: #6b7280;
+      --line: #e5e7eb; --accent: #2563eb; --star: #b45309;
+      --card: #fafafa;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117; --fg: #e6edf3; --muted: #8b949e;
+        --line: #30363d; --accent: #4a9eff; --star: #e3b341;
+        --card: #161b22;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--fg);
+      font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    a { color: var(--accent); }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+    header.site { border-bottom: 1px solid var(--line); padding: 14px 0; }
+    header.site a.brand { color: var(--fg); font-weight: 600; text-decoration: none; }
+    footer.site { border-top: 1px solid var(--line); margin-top: 48px; padding: 20px 0; color: var(--muted); font-size: 13px; }
+    code { font-family: ui-monospace, Menlo, Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <header class="site"><div class="wrap">
+    <a class="brand" href={href(base, '/')}>skill-atlas</a>
+  </div></header>
+  <main class="wrap"><slot /></main>
+  <footer class="site"><div class="wrap">
+    <a href={href(base, '/about/')}>About &amp; credits</a>
+    &nbsp;·&nbsp;
+    <a href="https://peterlwkww-ai.github.io/Superpowers-guide/">Superpowers Guide ↗</a>
+  </div></footer>
+</body>
+</html>
