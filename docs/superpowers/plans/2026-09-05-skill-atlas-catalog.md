@@ -1945,6 +1945,8 @@ const fullHtml = full ? mdToSafeHtml(skill.bodyMarkdown) : ''
 <section class="source-body">
   <h2>The skill itself</h2>
 
+  <p class="official-desc">{skill.description}</p>
+
   {skill.headings.length > 0 && (
     <>
       <p class="label">Structure</p>
@@ -1973,6 +1975,8 @@ const fullHtml = full ? mdToSafeHtml(skill.bodyMarkdown) : ''
 
 <style>
   .source-body h2 { font-size: 17px; margin: 0 0 12px; }
+  /* 官方描述屬於「技能本身」這一節，不屬於手寫心得那一欄 */
+  .official-desc { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.6; }
   .label { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px; }
   .toc { margin: 0; padding-left: 18px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px; color: var(--muted); }
   .prose { font-size: 14px; }
@@ -2034,7 +2038,7 @@ const noteHtml = n ? mdToSafeHtml(n.body) : ''
       ) : (
         <section class="no-note">
           <p class="label">Quick facts</p>
-          <p>{skill.description}</p>
+          <p>{skill.category} · {skill.source?.name} v{skill.version}</p>
           <p class="muted">No notes written for this skill yet.</p>
         </section>
       )}
