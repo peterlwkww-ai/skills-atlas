@@ -8,7 +8,7 @@
 
 **Tech Stack:** Astro 5（static）、Fuse.js 7、marked（Markdown → HTML，建置期）、sanitize-html（第三方內容消毒）、gray-matter（validate.mjs 讀 frontmatter）、node:test、GitHub Actions → GitHub Pages
 
-**Spec:** `docs/superpowers/specs/2026-09-05-skills-atlas-design.md`
+**Spec:** `docs/superpowers/specs/2026-09-05-skill-atlas-design.md`
 
 ## Global Constraints
 
@@ -2708,7 +2708,7 @@ git push -u origin master
 
 ## Execution Handoff
 
-**Plan complete and saved to `docs/superpowers/plans/2026-09-05-skills-atlas-catalog.md`. Two execution options:**
+**Plan complete and saved to `docs/superpowers/plans/2026-09-05-skill-atlas-catalog.md`. Two execution options:**
 
 **1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
 
